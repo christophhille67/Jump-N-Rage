@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float acceleration = 60f;    
     [SerializeField] private float turnSpeed = 720f;
     [SerializeField] private float jumpHeight = 2f;
+    [SerializeField] private float coyoteTime = 0.12f;
+    [SerializeField] private float jumpBufferTime = 0.12f;
 
     [Header("Input")]
     [SerializeField] private InputActionReference moveAction;
@@ -23,7 +25,9 @@ public class PlayerController : MonoBehaviour
     private Transform cam;
     private Vector2 moveInput;
     private bool isGrounded;
-    private bool jumpRequested;
+    
+    private float lastGroundedTime = -10f;    // when we touched the ground last
+    private float lastJumpPressedTime = -10f; // when jump was pressed last
 
     private void Awake()
     {
@@ -47,12 +51,15 @@ public class PlayerController : MonoBehaviour
     {
         moveInput = moveAction.action.ReadValue<Vector2>();
         if (jumpAction.action.WasPressedThisFrame())
-            jumpRequested = true;
+            lastJumpPressedTime = Time.time;
     }
 
     private void FixedUpdate()
     {
         isGrounded = CheckGrounded();
+        // Remember when last on Ground
+        if (isGrounded && rb.linearVelocity.y <= 0.1f)
+            lastGroundedTime = Time.time;
         
         Vector3 moveDir = GetCameraRelativeDirection();
 
@@ -66,14 +73,19 @@ public class PlayerController : MonoBehaviour
 
         rb.linearVelocity = new Vector3(newVelocity.x, rb.linearVelocity.y, newVelocity.z);
 
-        // Jump
-        if (jumpRequested && isGrounded)
+        // Jump (with coyote time and jump buffer)
+        bool wasRecentlyGrounded = Time.time - lastGroundedTime <= coyoteTime;
+        bool jumpWasRecentlyPressed = Time.time - lastJumpPressedTime <= jumpBufferTime;
+
+        if (wasRecentlyGrounded && jumpWasRecentlyPressed)
         {
-            // Upward speed needed to reach exactly jumpHeight: v = sqrt(2 * g * h)
             float jumpVelocity = Mathf.Sqrt(2f * -Physics.gravity.y * jumpHeight);
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpVelocity, rb.linearVelocity.z);
+
+            // Use both up, so one press = one jump
+            lastJumpPressedTime = -10f;
+            lastGroundedTime = -10f;
         }
-        jumpRequested = false;
 
         // Turn to direction we are moving
         if (moveDir.sqrMagnitude > 0.01f)
@@ -92,7 +104,7 @@ public class PlayerController : MonoBehaviour
         return forward * moveInput.y + right * moveInput.x;
     }
 
-        private bool CheckGrounded()
+    private bool CheckGrounded()
     {
         return Physics.SphereCast(transform.position, groundCheckRadius, Vector3.down,
                                   out RaycastHit hit, groundCheckDistance,

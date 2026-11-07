@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpHeight = 2f;
     [SerializeField] private float coyoteTime = 0.12f;
     [SerializeField] private float jumpBufferTime = 0.12f;
+    [SerializeField] private float fallGravityMultiplier = 2f;     // falling is 2x faster
+    [SerializeField] private float lowJumpGravityMultiplier = 3f;  // if released early, jump lower
 
     [Header("Input")]
     [SerializeField] private InputActionReference moveAction;
@@ -28,6 +30,8 @@ public class PlayerController : MonoBehaviour
     
     private float lastGroundedTime = -10f;    // when we touched the ground last
     private float lastJumpPressedTime = -10f; // when jump was pressed last
+    private bool jumpHeld;
+
 
     private void Awake()
     {
@@ -52,6 +56,8 @@ public class PlayerController : MonoBehaviour
         moveInput = moveAction.action.ReadValue<Vector2>();
         if (jumpAction.action.WasPressedThisFrame())
             lastJumpPressedTime = Time.time;
+        
+        jumpHeld = jumpAction.action.IsPressed();
     }
 
     private void FixedUpdate()
@@ -85,6 +91,18 @@ public class PlayerController : MonoBehaviour
             // Use both up, so one press = one jump
             lastJumpPressedTime = -10f;
             lastGroundedTime = -10f;
+        }
+
+        // Better gravity
+        if (rb.linearVelocity.y < 0f)
+        {
+            // falling: pull down harder
+            rb.AddForce(Physics.gravity * (fallGravityMultiplier - 1f), ForceMode.Acceleration);
+        }
+        else if (rb.linearVelocity.y > 0f && !jumpHeld)
+        {
+            // still going up, but jump was released, jump is lower
+            rb.AddForce(Physics.gravity * (lowJumpGravityMultiplier - 1f), ForceMode.Acceleration);
         }
 
         // Turn to direction we are moving

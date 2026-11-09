@@ -6,7 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 7f;
-    [SerializeField] private float acceleration = 60f;    
+    [SerializeField] private float acceleration = 60f;
+    [SerializeField] private float airAcceleration = 15f;  // weaker air strafing    
     [SerializeField] private float turnSpeed = 720f;
     [SerializeField] private float jumpHeight = 2f;
     [SerializeField] private float coyoteTime = 0.12f;
@@ -74,8 +75,11 @@ public class PlayerController : MonoBehaviour
         Vector3 currentVelocity = rb.linearVelocity;
         currentVelocity.y = 0f;
 
+        // On ground, strafing is sharp, in the air less so
+        float currentAcceleration = isGrounded ? acceleration : airAcceleration;
+
         Vector3 newVelocity = Vector3.MoveTowards(currentVelocity, targetVelocity,
-                                                  acceleration * Time.fixedDeltaTime);
+                                                  currentAcceleration * Time.fixedDeltaTime);
 
         rb.linearVelocity = new Vector3(newVelocity.x, rb.linearVelocity.y, newVelocity.z);
 

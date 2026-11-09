@@ -24,6 +24,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckDistance = 0.7f;
     [SerializeField] private LayerMask groundLayers = ~0;
 
+    [Header("Knockback")]
+    [SerializeField] private float knockbackControlLockTime = 0.4f;  // how many seconds without control after being hit
+
     private Rigidbody rb;
     private Transform cam;
     private Vector2 moveInput;
@@ -32,6 +35,7 @@ public class PlayerController : MonoBehaviour
     private float lastGroundedTime = -10f;    // when we touched the ground last
     private float lastJumpPressedTime = -10f; // when jump was pressed last
     private bool jumpHeld;
+    private float controlLockedUntil;
 
 
     private void Awake()
@@ -59,6 +63,10 @@ public class PlayerController : MonoBehaviour
             lastJumpPressedTime = Time.time;
         
         jumpHeld = jumpAction.action.IsPressed();
+        
+        // TEMP: test knockback, remove later
+        if (Keyboard.current.kKey.wasPressedThisFrame)
+            ApplyKnockback(-transform.forward * 8f + Vector3.up * 4f);
     }
 
     private void FixedUpdate()
@@ -70,18 +78,22 @@ public class PlayerController : MonoBehaviour
         
         Vector3 moveDir = GetCameraRelativeDirection();
 
-        Vector3 targetVelocity = moveDir * moveSpeed;
+        bool hasControl = Time.time >= controlLockedUntil;
 
-        Vector3 currentVelocity = rb.linearVelocity;
-        currentVelocity.y = 0f;
+        if (hasControl)
+        {
+            Vector3 targetVelocity = moveDir * moveSpeed;
 
-        // On ground, strafing is sharp, in the air less so
-        float currentAcceleration = isGrounded ? acceleration : airAcceleration;
+            Vector3 currentVelocity = rb.linearVelocity;
+            currentVelocity.y = 0f;
 
-        Vector3 newVelocity = Vector3.MoveTowards(currentVelocity, targetVelocity,
-                                                  currentAcceleration * Time.fixedDeltaTime);
+            float currentAcceleration = isGrounded ? acceleration : airAcceleration;
 
-        rb.linearVelocity = new Vector3(newVelocity.x, rb.linearVelocity.y, newVelocity.z);
+            Vector3 newVelocity = Vector3.MoveTowards(currentVelocity, targetVelocity,
+                                                      currentAcceleration * Time.fixedDeltaTime);
+
+            rb.linearVelocity = new Vector3(newVelocity.x, rb.linearVelocity.y, newVelocity.z);
+        }
 
         // Jump (with coyote time and jump buffer)
         bool wasRecentlyGrounded = Time.time - lastGroundedTime <= coyoteTime;
@@ -103,14 +115,14 @@ public class PlayerController : MonoBehaviour
             // falling: pull down harder
             rb.AddForce(Physics.gravity * (fallGravityMultiplier - 1f), ForceMode.Acceleration);
         }
-        else if (rb.linearVelocity.y > 0f && !jumpHeld)
+        else if (rb.linearVelocity.y > 0f && !jumpHeld && hasControl)
         {
             // still going up, but jump was released, jump is lower
             rb.AddForce(Physics.gravity * (lowJumpGravityMultiplier - 1f), ForceMode.Acceleration);
         }
 
         // Turn to direction we are moving
-        if (moveDir.sqrMagnitude > 0.01f)
+        if (hasControl && moveDir.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDir);
             Quaternion newRotation = Quaternion.RotateTowards(rb.rotation, targetRotation,
@@ -129,7 +141,15 @@ public class PlayerController : MonoBehaviour
     private bool CheckGrounded()
     {
         return Physics.SphereCast(transform.position, groundCheckRadius, Vector3.down,
-                                  out RaycastHit hit, groundCheckDistance,
+                                  out _, groundCheckDistance,
                                   groundLayers, QueryTriggerInteraction.Ignore);
+    }
+
+    // enemies or traps call this function to push player
+    public void ApplyKnockback(Vector3 push)
+    {
+        rb.AddForce(push, ForceMode.VelocityChange);   // instant speed change
+        controlLockedUntil = Time.time + knockbackControlLockTime;
+        lastGroundedTime = -10f;                       // coyote jump diasabled after hit
     }
 }

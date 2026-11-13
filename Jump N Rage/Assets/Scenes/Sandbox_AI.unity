@@ -825,6 +825,11 @@ Transform:
   - {fileID: 777317589}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1192136294 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8378245813765645006, guid: 43862ec483f87c24fb807ac3844dbdbe, type: 3}
+  m_PrefabInstance: {fileID: 3895802388480165115}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1220182663
 GameObject:
   m_ObjectHideFlags: 0
@@ -1293,6 +1298,7 @@ MonoBehaviour:
   m_BlackboardVariableOverridesList:
   - rid: 114420985019760649
   - rid: 114420985019760691
+  - rid: 114420985019760969
   m_OriginalGraph: {fileID: 1048621781353984424, guid: 2f020a294fc43c247ab8e1c71801b50d, type: 2}
   m_IsInitialised: 0
   m_IsStarted: 0
@@ -1319,6 +1325,14 @@ MonoBehaviour:
         - {fileID: 80732974}
         - {fileID: 1327082185}
         - {fileID: 777317588}
+    - rid: 114420985019760969
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 11577102104636725711
+          m_Value1: 4804070857397105383
+        Name: Player
+        m_Value: {fileID: 1192136294}
 --- !u!1001 &3895802388480165115
 PrefabInstance:
   m_ObjectHideFlags: 0

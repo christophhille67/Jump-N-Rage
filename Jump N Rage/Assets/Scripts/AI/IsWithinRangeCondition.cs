@@ -15,15 +15,23 @@ public partial class IsWithinRangeCondition : Condition
     [SerializeReference] public BlackboardVariable<GameObject> Agent;
     [SerializeReference] public BlackboardVariable<GameObject> Target;
     [SerializeReference] public BlackboardVariable<float> Range;
+    [SerializeReference] public BlackboardVariable<float> MaxHeightDifference = new BlackboardVariable<float>(2.5f);
 
-    // The graph calls this to ask "is the condition true right now?"
     public override bool IsTrue()
     {
         if (Agent.Value == null || Target.Value == null)
             return false;
 
-        float distance = Vector3.Distance(Agent.Value.transform.position,
-                                          Target.Value.transform.position);
-        return distance <= Range.Value;
-    }
+        Vector3 agentPos = Agent.Value.transform.position;
+        Vector3 targetPos = Target.Value.transform.position;
+
+        // Ignore targets on a different floor (above or below the guard's platform)
+        if (Mathf.Abs(targetPos.y - agentPos.y) > MaxHeightDifference.Value)
+            return false;
+
+        // Measure distance on the ground only
+        agentPos.y = 0f;
+        targetPos.y = 0f;
+        return Vector3.Distance(agentPos, targetPos) <= Range.Value;
+    }   
 }

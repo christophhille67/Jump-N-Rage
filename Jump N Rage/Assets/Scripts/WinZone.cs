@@ -7,6 +7,8 @@ public class WinZone : MonoBehaviour
     public GameObject winScreenUI;
     public GameObject blurVolume;
 
+    public TMPro.TextMeshProUGUI rageText;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -26,13 +28,23 @@ public class WinZone : MonoBehaviour
         {
             blurVolume.SetActive(true);
         }
-
+        if (rageText != null)
+        
+        rageText.text = "Rage count: " + RageCounter.RageCount.Count;
+        
         Time.timeScale = 0f;
     }
 
     public void RestartGame()
-    {
+    {   
+        RageCounter.RageCount.Count = 0;
         Time.timeScale = 1f; // reset time scale to normal
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // reload the current scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // reload the current 
     }
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+    
 }
+

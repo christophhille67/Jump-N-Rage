@@ -1,26 +1,20 @@
-<<<<<<< HEAD
-=======
+
+
 using TMPro;
->>>>>>> 70b3a6e1911d818e35cbc071595f18438917daaf
+
 using UnityEngine;
 
 public class GameTimer : MonoBehaviour
 {
-<<<<<<< HEAD
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-}
-=======
-    [SerializeField] private TextMeshProUGUI timerText;
+
+[SerializeField] private TextMeshProUGUI timerText;
 
     private float elapsedTime;
 
@@ -34,4 +28,4 @@ public class GameTimer : MonoBehaviour
         timerText.text = $"{minutes:00}:{seconds:00.00}";
     }
 }
->>>>>>> 70b3a6e1911d818e35cbc071595f18438917daaf
+

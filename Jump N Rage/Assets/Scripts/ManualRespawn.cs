@@ -31,6 +31,7 @@ public class ManualRespawn : MonoBehaviour
     private void Respawn()
     {
         if (spawnPoint == null) return;
+        RageCounter.RageCount.Count++;
 
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)

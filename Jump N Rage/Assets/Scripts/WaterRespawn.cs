@@ -8,6 +8,7 @@ public class WaterRespawn : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            RageCounter.RageCount.Count++;
             CharacterController controller =
                 other.GetComponent<CharacterController>();
 

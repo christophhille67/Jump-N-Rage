@@ -32,13 +32,15 @@ public class ManualRespawn : MonoBehaviour
     {
         if (spawnPoint == null) return;
 
-        if (controller != null)
-            controller.enabled = false;
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.position = spawnPoint.position;
+        }
 
         transform.position = spawnPoint.position;
-
-        if (controller != null)
-            controller.enabled = true;
     }
 
     private void HideHint()

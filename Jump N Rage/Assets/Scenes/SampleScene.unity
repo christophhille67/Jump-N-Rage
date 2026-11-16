@@ -16729,7 +16729,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Dr\xFCcke R f\xFCr Respawn"
+  m_text: 'Reach the top!
+
+
+    Hold Space for longer jumps
+
+    Press R for Respawn
+
+
+    Good Luck & Try not to Rage!
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -20064,6 +20074,25 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &617994026 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8378245813765645006, guid: 43862ec483f87c24fb807ac3844dbdbe, type: 3}
+  m_PrefabInstance: {fileID: 1852131991}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &617994028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617994026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1203eccf1d43caf48b4d831780734468, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ManualRespawn
+  spawnPoint: {fileID: 9606674}
+  respawnHint: {fileID: 470433342}
 --- !u!43 &635778669
 Mesh:
   m_ObjectHideFlags: 0
@@ -72030,9 +72059,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4720303129822786193, guid: 43862ec483f87c24fb807ac3844dbdbe, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 8378245813765645006, guid: 43862ec483f87c24fb807ac3844dbdbe, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2137978862}
+      addedObject: {fileID: 617994028}
   m_SourcePrefab: {fileID: 100100000, guid: 43862ec483f87c24fb807ac3844dbdbe, type: 3}
 --- !u!43 &1858370564
 Mesh:
@@ -81437,25 +81466,6 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!1 &2137978861 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4720303129822786193, guid: 43862ec483f87c24fb807ac3844dbdbe, type: 3}
-  m_PrefabInstance: {fileID: 1852131991}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2137978862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2137978861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1203eccf1d43caf48b4d831780734468, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ManualRespawn
-  spawnPoint: {fileID: 9606674}
-  respawnHint: {fileID: 470433342}
 --- !u!1 &2142375858
 GameObject:
   m_ObjectHideFlags: 0

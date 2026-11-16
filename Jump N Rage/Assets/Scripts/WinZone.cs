@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class WinZone : MonoBehaviour
 {
-    [Header("UI & Effekte")]
+    [Header("UI & Effects")]
     public GameObject winScreenUI;
     public GameObject blurVolume;
 
@@ -32,7 +32,7 @@ public class WinZone : MonoBehaviour
 
     public void RestartGame()
     {
-        Time.timeScale = 1f; // WICHTIG: Zeit wieder auf Normalgeschwindigkeit setzen!
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Lädt die aktuelle Szene neu
+        Time.timeScale = 1f; // reset time scale to normal
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // reload the current scene
     }
 }

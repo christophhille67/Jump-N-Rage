@@ -63,10 +63,6 @@ public class PlayerController : MonoBehaviour
             lastJumpPressedTime = Time.time;
         
         jumpHeld = jumpAction.action.IsPressed();
-        
-        // TEMP: test knockback, remove later
-        if (Keyboard.current.kKey.wasPressedThisFrame)
-            ApplyKnockback(-transform.forward * 8f + Vector3.up * 4f);
     }
 
     private void FixedUpdate()

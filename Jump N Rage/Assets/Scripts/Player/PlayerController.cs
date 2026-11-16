@@ -37,6 +37,9 @@ public class PlayerController : MonoBehaviour
     private bool jumpHeld;
     private float controlLockedUntil;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource jumpSound;
+
 
     private void Awake()
     {
@@ -99,6 +102,9 @@ public class PlayerController : MonoBehaviour
         {
             float jumpVelocity = Mathf.Sqrt(2f * -Physics.gravity.y * jumpHeight);
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpVelocity, rb.linearVelocity.z);
+
+            if (jumpSound != null)
+                jumpSound.Play();
 
             // Use both up, so one press = one jump
             lastJumpPressedTime = -10f;
